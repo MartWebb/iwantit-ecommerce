@@ -72,6 +72,10 @@ a.brand {
 .row.center {
   justify-content: center;
 }
+
+.row.top {
+  align-items: flex-start;
+}
 /* Image */
 img {
   border-radius: 0.5rem;
@@ -97,8 +101,17 @@ img.medium {
 .price {
   font-size: 2rem;
 }
+
+/* Product */
+.product-title {
+  color:#000;
+}
 /* Rating */
 .rating span {
   color: #f0c040;
   margin: 0.1rem;
+}
+
+.rating .num-reviews {
+  color: #000;
 }
