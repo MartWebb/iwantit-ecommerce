@@ -24,7 +24,7 @@ function CartPage({ match, location, history}) {
     };
 
     const checkoutHandler = () => {
-        history.push('/loginin?redirect=shipping')
+        history.push('/login?redirect=shipping')
     };
 
     return (
@@ -53,7 +53,7 @@ function CartPage({ match, location, history}) {
                                             >
                                             </img>
                                         </div>
-                                        <div className="mmin-30">
+                                        <div className="min-30">
                                             <Link to={`/product/${item.product}`}>{item.name}</Link>
                                         </div>
                                         <div>
