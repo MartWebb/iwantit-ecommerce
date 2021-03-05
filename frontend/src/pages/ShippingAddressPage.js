@@ -18,6 +18,7 @@ export default function ShippingAddressScreen(props) {
   const [city, setCity] = useState(shippingAddress.city || '');
   const [postalCode, setPostalCode] = useState(shippingAddress.postalCode || '');
   const [country, setCountry] = useState(shippingAddress.country || '');
+  
   const dispatch = useDispatch();
 
   const submitHandler = (event) => {

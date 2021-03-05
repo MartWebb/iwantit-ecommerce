@@ -46,7 +46,6 @@ function PaymentMethodPage({ history }) {
                         <label htmlFor="paypal">PayPal</label>
                     </div>
                     <div>
-                        
                         <input 
                             type="radio" 
                             id="stripe" 

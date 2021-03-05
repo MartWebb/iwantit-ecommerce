@@ -1,9 +1,19 @@
 import { applyMiddleware, createStore, compose, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-import { productListReducer, productDetailsReducer } from './reducers/productReducers';
+import { productListReducer, productDetailsReducer, productCreateReducer } from './reducers/productReducers';
 import { cartReducer } from './reducers/cartReducers';
-import { userLoginReducer, userRegisterReducer } from './reducers/userReducers';
-import { orderCreateReducer, orderDetailsReducer } from './reducers/orderReducers';
+import { 
+    userDetailsReducer, 
+    userLoginReducer, 
+    userRegisterReducer, 
+    userUpdateProfileReducer 
+} from './reducers/userReducers';
+import { 
+    listMyOrdersReducer, 
+    orderCreateReducer, 
+    orderDetailsReducer, 
+    orderPayReducer 
+} from './reducers/orderReducers';
 
 const cartItemsFromLocalStorage = localStorage.getItem('cartItems') 
 ? JSON.parse(localStorage.getItem('cartItems'))
@@ -31,11 +41,17 @@ const initialState = {
 const reducer = combineReducers({
     productList: productListReducer,
     productDetails: productDetailsReducer,
+    productCreate: productCreateReducer,
     cart: cartReducer,
     userLogin: userLoginReducer,
+    userDetails: userDetailsReducer,
+    userUpdateProfile: userUpdateProfileReducer,
     userRegister: userRegisterReducer,
     orderCreate: orderCreateReducer,
-    orderDetails: orderDetailsReducer
+    orderDetails: orderDetailsReducer,
+    orderPay: orderPayReducer,
+    orderMyHistory: listMyOrdersReducer
+
 });
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

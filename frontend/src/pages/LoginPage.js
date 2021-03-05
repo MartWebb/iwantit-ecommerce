@@ -46,7 +46,7 @@ function LoginPage({ location, history }) {
                         required
                     >
                     </input>
-                    <label htmlFor="password" >Email address</label>
+                    <label htmlFor="password" >Password</label>
                     <input 
                         type="password" 
                         id="password" 

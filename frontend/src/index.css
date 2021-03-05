@@ -28,12 +28,12 @@ body {
 }
 header {
 	grid-area: header;
-	background-color: #203040;
+	/* background-color: #203040; */
 	background-color: #6310DB;
 }
 main {
 	/* for dropdown */
-	margin-top: 3rem;
+	/* margin-top: 3rem; */
 	grid-area: main;
 	padding: 1rem;
 }
@@ -41,7 +41,7 @@ footer {
 	grid-area: footer;
 	/* background-color: #203040; */
 	background-color: #6310DB;
-	color: #ffffff;
+	color: #fff;
 }
 /* Common */
 h1 {
@@ -108,17 +108,21 @@ button.primary {
 button.block {
   width: 100%;
 }
+
+button.small {
+	font-size: 1.2rem;
+}
 /* Header */
 header a {
   color: #ffffff;
   padding: 1rem;
-  margin-left: 1rem;
+  /* margin-left: 1rem; */
 }
 a.brand {
   color: #ffffff;
   font-size: 3.5rem;
   font-weight: bold;
-  margin-left: 1rem;
+  /* margin-left: 1rem; */
 }
 
 .badge {
@@ -137,11 +141,15 @@ a.brand {
   align-items: center;
 }
 .row.center {
-  justify-content: center;
+	justify-content: center;
 }
 
 .row.top {
-  align-items: flex-start;
+	align-items: flex-start;
+}
+
+.row.start {
+	justify-content: flex-start;
 }
 
 .col-1 {
@@ -154,6 +162,10 @@ a.brand {
 
 .min-30 {
 	min-width: 30rem;
+}
+
+.p-1 {
+	padding: 1rem;
 }
 
 /* Image */
@@ -215,7 +227,8 @@ img.large {
   color: #90ee90;
 }
 
-.error {
+.error,
+.danger {
   color: #ff0000;
 }
 
@@ -233,6 +246,11 @@ img.large {
 .alert-danger {
 	color: #ff0000;
 	background-color: #ffe0e0;
+}
+
+.alert-success {
+	color: #20a020;
+	background-color: #eeffe0;
 }
 
 /* Form */
@@ -273,7 +291,7 @@ img.large {
 }
 
 .dropdown:hover .dropdown-content {
-	/* display: block; */
+	display: block;
 	display: flex;
 	justify-content: flex-end;
 }
@@ -290,4 +308,25 @@ img.large {
 .checkout-steps > div.active {
 	border-top-color: #f08000;
 	color: #f08000;
+}
+
+/* Tables */
+.table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.table tbody tr:nth-of-type(odd) {
+	background-color: #f4f4f4;
+}
+
+.table td,
+.table th {
+	text-align: left;
+	border: 0.1rem solid #e4e4e4;
+	padding: 0.5rem;
+}
+
+.table button {
+	margin: 0 0.2rem;
 }
