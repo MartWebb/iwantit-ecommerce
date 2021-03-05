@@ -14,7 +14,6 @@ const router  = new express.Router();
 // @desc   Auth user & get token
 // @route  POST /api/users/login
 // @access Public
-
 router.post('/login', expressAsyncHandler(async(req, res) => {
     const user = await User.findOne({email: req.body.email});
     if (user) {
@@ -65,6 +64,9 @@ router.post('/register', expressAsyncHandler(async (req, res) => {
     }
 }));
 
+// @desc   Get user by id
+// @route  GET /api/users/:id
+// @access Private/Admin
 router.get('/:id', expressAsyncHandler( async (req, res) => {
     const user = await User.findById(req.params.id);
 
@@ -75,6 +77,9 @@ router.get('/:id', expressAsyncHandler( async (req, res) => {
     }
 }));
 
+// @desc   Update user
+// @route  PUT /api/users/:id
+// @access Private/Admin
 router.put('/profile', isAuth, expressAsyncHandler( async (req, res) => {
     const user = await User.findById(req.user._id);
     if (user) {

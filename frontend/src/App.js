@@ -19,6 +19,7 @@ import PrivateRoute from './components/PrivateRoute';
 import ProductListPage from './pages/ProductListPage';
 import ProductEditPage from './pages/ProductEditPage';
 import AdminRoute from './components/AdminRoute';
+import OrderListPage from './pages/OrderListPage';
 
 function App() {
 	
@@ -39,6 +40,7 @@ function App() {
 					<Route path="/orderhistory" component={OrderHistoryPage}></Route>
 					<PrivateRoute path="/profile" component={ProfilePage}></PrivateRoute>
 					<AdminRoute path="/productlist" component={ProductListPage}></AdminRoute>
+					<AdminRoute path="/orderlist" component={OrderListPage}></AdminRoute>
 					<Route path="/" component={HomePage} exact></Route>
 				</main>
 				<footer className="row center">Copyright &copy; BuyIt</footer>

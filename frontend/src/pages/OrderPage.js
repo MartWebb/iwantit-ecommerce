@@ -4,20 +4,35 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
-import { detailsOrder, payOrder }  from '../actions/orderActions';
+import { deliverOrder, detailsOrder, payOrder }  from '../actions/orderActions';
 import axios from 'axios';
-import { ORDER_PAY_RESET } from '../constants/orderConstants';
+import { ORDER_DELIVER_RESET, ORDER_PAY_RESET } from '../constants/orderConstants';
 
 // import CartPage from './CartPage';
 
 function OrderPage({ history, match }) {
     const orderId = match.params.id;
     const [sdkReady, setSdkReady] = useState(false);
+
     const orderDetails = useSelector((state) => state.orderDetails);
     const { order, loading, error } = orderDetails;
 
     const orderPay = useSelector(state => state.orderPay);
-    const { loading: loadinPay, success: successPay, error: errorPay } = orderPay;
+    const { 
+        loading: loadingPay, 
+        success: successPay, 
+        error: errorPay 
+    } = orderPay;
+
+    const userLogin = useSelector(state => state.userLogin);
+    const { userInfo } = userLogin;
+
+    const orderDeliver = useSelector(state => state.orderDeliver);
+    const { 
+        loading: deliverLoading, 
+        success: deliverSuccess, 
+        error: deliverError 
+    } = orderDeliver;
 
     const dispatch = useDispatch();
 
@@ -33,9 +48,11 @@ function OrderPage({ history, match }) {
           };
           document.body.appendChild(script);
         };
-        if (!order || successPay || (order && order._id !== orderId)) {
-          dispatch(detailsOrder(orderId));
-          dispatch({ type: ORDER_PAY_RESET });
+        if (!order || successPay || deliverSuccess || (order && order._id !== orderId)) {
+            dispatch({ type: ORDER_PAY_RESET });
+            dispatch({ type: ORDER_DELIVER_RESET });
+            dispatch(detailsOrder(orderId));
+          
         } else {
           if (!order.isPaid) {
             if (!window.paypal) {
@@ -45,10 +62,14 @@ function OrderPage({ history, match }) {
             }
           }
         }
-      }, [dispatch, orderId, sdkReady, successPay, order]);
+      }, [dispatch, orderId, sdkReady, successPay, deliverSuccess, order]);
 
     const successfulPaymentHandler = (paymentResult) => {
         dispatch(payOrder(order, paymentResult));
+    };
+
+    const deliverHandler = () => {
+        dispatch(deliverOrder(order._id));
     };
 
     return (
@@ -166,7 +187,7 @@ function OrderPage({ history, match }) {
                                       {errorPay && (
                                           <MessageBox variant="danger">{errorPay}</MessageBox>
                                           )}
-                                          {loadinPay && <LoadingBox></LoadingBox>}
+                                          {loadingPay && <LoadingBox></LoadingBox>}
                                         <PayPalButton
                                             amount={order.totalPrice}
                                             onSuccess={successfulPaymentHandler}
@@ -176,6 +197,18 @@ function OrderPage({ history, match }) {
                                   )}
                                 </li>
                                   )}
+                            {userInfo.isAdmin && order.isPaid && !order.isDelivered &&(
+                            <li>
+                                {deliverLoading && <LoadingBox></LoadingBox>}
+                                {deliverError && <MessageBox>{deliverError}</MessageBox>}
+                                <button 
+                                    className="primary block"
+                                    type="button" 
+                                    onClick={deliverHandler}>
+                                    Deliver Order
+                                </button>
+                            </li>
+                                )}      
                         </ul>
                     </div>
                 </div>
