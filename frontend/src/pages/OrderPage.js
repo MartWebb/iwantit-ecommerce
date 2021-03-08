@@ -16,7 +16,8 @@ function OrderPage({ history, match }) {
 
     const orderDetails = useSelector((state) => state.orderDetails);
     const { order, loading, error } = orderDetails;
-
+    console.log(orderDetails);
+    // console.log(order._id)
     const orderPay = useSelector(state => state.orderPay);
     const { 
         loading: loadingPay, 
@@ -200,7 +201,7 @@ function OrderPage({ history, match }) {
                             {userInfo.isAdmin && order.isPaid && !order.isDelivered &&(
                             <li>
                                 {deliverLoading && <LoadingBox></LoadingBox>}
-                                {deliverError && <MessageBox>{deliverError}</MessageBox>}
+                                {deliverError && <MessageBox variant="dangers">{deliverError}</MessageBox>}
                                 <button 
                                     className="primary block"
                                     type="button" 

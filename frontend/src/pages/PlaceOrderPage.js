@@ -19,7 +19,7 @@ function PlaceOrderPage({ history }) {
 
     const orderCreate = useSelector((state) => state.orderCreate);
     const { loading, success, error, order } = orderCreate;
-    console.log(success);
+
 
     const toFloatingNumber = (num) => Number(num.toFixed(2)); 
     cart.itemsPrice = toFloatingNumber(cart.cartItems.reduce((accumilator, current) => accumilator + current.qty * current.price, 0));

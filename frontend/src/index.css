@@ -181,6 +181,7 @@ img.small {
 img.medium {
   max-width: 29rem;
   width: 100%;
+  /* min-height: 18em; */
 }
 
 img.large {
@@ -193,6 +194,7 @@ img.large {
   background-color: #f8f8f8;
   border-radius: 0.5rem;
   margin: 1rem;
+  /* min-height: 28em; */
 }
 .card-body {
   padding: 1rem;
