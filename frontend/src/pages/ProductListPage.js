@@ -6,7 +6,8 @@ import MessageBox from '../components/MessageBox';
 import { PRODUCT_CREATE_RESET, PRODUCT_DELETE_RESET } from '../constants/productConstants';
 
 
-function ProductListPage({ history }) {
+function ProductListPage({ history, match }) {
+    const sellerMode = match.path.indexOf('/seller') >= 0;
     const productList = useSelector(state => state.productList);
     const { loading, error, products } = productList;
 
@@ -25,6 +26,9 @@ function ProductListPage({ history }) {
         error: deleteError 
     } = productDelete;
 
+    const userLogin = useSelector(state => state.userLogin );
+    const { userInfo } = userLogin;
+    
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -35,7 +39,7 @@ function ProductListPage({ history }) {
         if (deleteSuccess) {
             dispatch({ type: PRODUCT_DELETE_RESET});
          }
-        dispatch(listProducts());
+        dispatch(listProducts({seller: sellerMode ? userInfo._id : '' }));
     }, [dispatch, createdProduct, history, createSuccess, deleteSuccess]);
 
     const deleteHandler = (product) => {

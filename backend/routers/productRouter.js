@@ -3,13 +3,18 @@ import expressAsyncHandler from 'express-async-handler';
 import Product from '../models/productModel.js';
 import isAdmin from '../utils/isAdmin.js';
 import isAuth from '../utils/isAuth.js';
+import isSellerOrAdmin from '../utils/isSellerOrAdmin.js';
 const router  = new express.Router();
 
 // @desc   Featch all products
 // @route  GET /api/products
 // @access Public
 router.get('/', expressAsyncHandler(async (req, res) => {
-    const products = await Product.find({});
+    const seller = req.query.seller || '';
+    const sellerFilter = seller ? { seller } : {};
+    const products = await Product.find({...sellerFilter}).populate(
+        'seller',
+        'seller.name seller.logo');
     
     res.send(products);
 }));
@@ -18,7 +23,10 @@ router.get('/', expressAsyncHandler(async (req, res) => {
 // @route  GET /api/products/:id
 // @access Public
 router.get('/:id', expressAsyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate(
+        'seller',
+        'seller.name seller.logo seller.rating seller.numReviews'
+    );
 
     if (product) {
         res.send(product);
@@ -31,9 +39,10 @@ router.get('/:id', expressAsyncHandler(async (req, res) => {
 // @desc   Create a product
 // @route  POST /api/products
 // @access Private/Admin
-router.post('/', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
+router.post('/', isAuth, isSellerOrAdmin, expressAsyncHandler(async (req, res) => {
     const product = new Product({
         name: 'sample name ' + Date.now(),
+        seller: req.user._id,
         image: '/images/sample.jpg',
         price: 0,
         user: req.user._id,
@@ -52,7 +61,7 @@ router.post('/', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
 // @desc   Update a product
 // @route  PUT /api/products/:id
 // @access Private/Admin
-router.put('/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
+router.put('/:id', isAuth, isSellerOrAdmin, expressAsyncHandler(async (req, res) => {
     const { 
         name, 
         price, 

@@ -22,6 +22,8 @@ import AdminRoute from './components/AdminRoute';
 import OrderListPage from './pages/OrderListPage';
 import UserListPage from './pages/UserListPage';
 import UserEditPage from './pages/UserEditPage';
+import SellerRoute from './components/SellerRoute';
+import SellerPage from './pages/SellerPage';
 
 function App() {
 	
@@ -30,6 +32,7 @@ function App() {
 			<div className="grid-container">
 				<Header />
 				<main>
+					<Route path="/seller/:id" component={SellerPage}></Route>
 					<Route path="/cart/:id?" component={CartPage}></Route>
 					<Route path="/product/:id" component={ProductPage} exact></Route>
 					<Route path="/product/:id/edit" component={ProductEditPage} exact></Route>
@@ -41,10 +44,12 @@ function App() {
 					<Route path="/order/:id" component={OrderPage}></Route>
 					<Route path="/orderhistory" component={OrderHistoryPage}></Route>
 					<PrivateRoute path="/profile" component={ProfilePage}></PrivateRoute>
-					<AdminRoute path="/productlist" component={ProductListPage}></AdminRoute>
-					<AdminRoute path="/orderlist" component={OrderListPage}></AdminRoute>
+					<AdminRoute path="/productlist" component={ProductListPage} exact></AdminRoute>
+					<AdminRoute path="/orderlist" component={OrderListPage} exact></AdminRoute>
 					<AdminRoute path="/userlist" component={UserListPage}></AdminRoute>
 					<AdminRoute path="/user/:id/edit" component={UserEditPage}></AdminRoute>
+					<SellerRoute path="/productlist/seller" component={ProductListPage}></SellerRoute>
+					<SellerRoute path="/orderlist/seller" component={OrderListPage}></SellerRoute>
 					<Route path="/" component={HomePage} exact></Route>
 				</main>
 				<footer className="row center">Copyright &copy; I Want It</footer>

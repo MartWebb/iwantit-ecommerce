@@ -16,9 +16,13 @@ function Product({product}) {
                 <Rating rating={product.rating} numReviews={product.numReviews}/>
                 <div className="row">
                     <div className="price">${product.price}</div>
-                    
-                    </div>
-                </div>
+                </div>  
+                <div>
+                    <Link  to={`/seller/${product.seller._id}`}>
+                        {product.seller.seller.name}
+                    </Link>
+                </div>  
+            </div>
         </div>
     )
 }

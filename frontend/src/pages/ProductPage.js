@@ -15,6 +15,7 @@ function ProductPage({ history, match}) {
     const [qty, setQty] = useState(1);
     const productDetails = useSelector((state) => state.productDetails);
     const { loading, error, product } = productDetails;
+    console.log(product)
 
     // if (!product) {
     //     return <div>Product not Found</div>;
@@ -62,6 +63,19 @@ function ProductPage({ history, match}) {
                         <div className="col-1">
                             <div className="card card-body">
                                 <ul>
+                                    <li>
+                                        Seller{' '}
+                                        <h2>
+                                            <Link to={`/seller/${product.seller._id}`}>
+                                                {product.seller.seller.name}
+                                            </Link>
+                                        </h2>
+                                        <Rating
+                                            rating={product.seller.seller.rating}
+                                            numReviews={product.seller.seller.numReviews}
+                                        >    
+                                        </Rating>
+                                    </li>
                                     <li>
                                         <div className="row">
                                             <div>Price</div>
@@ -116,3 +130,4 @@ function ProductPage({ history, match}) {
 }
 
 export default ProductPage;
+

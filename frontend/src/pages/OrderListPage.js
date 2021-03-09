@@ -5,19 +5,23 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { ORDER_DELETE_RESET } from '../constants/orderConstants';
 
-function OrderListPage({ history }) {
+function OrderListPage({ history, match }) {
+    const sellerMode = match.path.indexOf('/seller') >= 0;
     const orderList = useSelector(state => state.orderList);
     const { loading, orders, error } = orderList;
 
     const orderDelete = useSelector(state => state.orderDelete);
     const { loading: deleteLoading, success: deleteSuccess, error: deleteError } = orderDelete;
 
+    const userLogin = useSelector(state => state.userLogin);
+    const { userInfo } = userLogin;
+
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch({ type: ORDER_DELETE_RESET });
-        dispatch(listOrders());
-    }, [dispatch, deleteSuccess]);
+        dispatch(listOrders({ seller: sellerMode ? userInfo._id : '' }));
+    }, [dispatch, deleteSuccess, sellerMode, userInfo._id ]);
 
     const deleteHandler = (order) => {
         if(window.confirm('Are you sure you want to delete the order?')) {
@@ -53,7 +57,7 @@ function OrderListPage({ history }) {
                             {orders.map((order) => (
                                 <tr key={order._id}>
                                     <td>{order._id}</td>
-                                    <td>{order.user.name}</td>
+                                    <td>{order.user ? order.user.name : 'Deleted User' }</td>
                                     <td>{order.createdAt.substring(0, 10)}</td>
                                     <td>{order.totalPrice.toFixed(2)}</td>
                                     <td>{order.isPaid ? order.paidAt.substring(0, 10) : 'No' }</td>

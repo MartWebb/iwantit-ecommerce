@@ -77,7 +77,7 @@ export const listMyOrdersReducer = (state = { orders: [] }, action) => {
         case ORDER_HISTORY_SUCCESS:
             return { loading: false, orders: action.payload };
         case ORDER_HISTORY_FAIL:
-            return { loading: true, error: action.payload };    
+            return { loading: false, error: action.payload };    
         default: 
             return state;    
     }
@@ -90,7 +90,7 @@ export const ordersListReducer = (state = { orders: [] }, action) => {
         case ORDER_LIST_SUCCESS:
             return { loading: false, orders: action.payload };
         case ORDER_LIST_FAIL:
-            return { loading: true, error: action.payload };    
+            return { loading: false, error: action.payload };    
         default: 
             return state;    
     }
@@ -103,7 +103,7 @@ export const orderDeleteReducer = (state = { orders: [] }, action) => {
         case ORDER_DELETE_SUCCESS:
             return { loading: false, success: true };
         case ORDER_DELETE_FAIL:
-            return { loading: true, error: action.payload };
+            return { loading: false, error: action.payload };
         case ORDER_DELETE_RESET:
             return {};        
         default: 
