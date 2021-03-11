@@ -11,12 +11,22 @@ const router  = new express.Router();
 // @access Public
 router.get('/', expressAsyncHandler(async (req, res) => {
     const seller = req.query.seller || '';
+    const name = req.query.name || '';
+    const category = req.query.category || '';
+    const categoryFilter = category ? { category } : {};
+    const nameFilter = name ? { name: {$regex: name, $options: 'i'} } : {};
     const sellerFilter = seller ? { seller } : {};
-    const products = await Product.find({...sellerFilter}).populate(
+    const products = await Product.find({...sellerFilter, ...nameFilter, ...categoryFilter}).populate(
         'seller',
         'seller.name seller.logo');
     
     res.send(products);
+}));
+
+router.get('/categories', expressAsyncHandler(async (req, res) => {
+    const categories = await Product.find().distinct('category');
+    
+    res.send(categories);
 }));
 
 // @desc   Featch single product

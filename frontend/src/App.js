@@ -24,6 +24,8 @@ import UserListPage from './pages/UserListPage';
 import UserEditPage from './pages/UserEditPage';
 import SellerRoute from './components/SellerRoute';
 import SellerPage from './pages/SellerPage';
+import SearchPage from './pages/SearchPage';
+import { useState } from 'react';
 
 function App() {
 	
@@ -43,6 +45,9 @@ function App() {
 					<Route path="/placeorder" component={PlaceOrderPage}></Route>
 					<Route path="/order/:id" component={OrderPage}></Route>
 					<Route path="/orderhistory" component={OrderHistoryPage}></Route>
+					<Route path="/search/name/:name?" component={SearchPage} exact></Route>
+					<Route path="/search/category/:category" component={SearchPage} exact></Route>
+					<Route path="/search/category/:category/name/:name" component={SearchPage} exact></Route>
 					<PrivateRoute path="/profile" component={ProfilePage}></PrivateRoute>
 					<AdminRoute path="/productlist" component={ProductListPage} exact></AdminRoute>
 					<AdminRoute path="/orderlist" component={OrderListPage} exact></AdminRoute>

@@ -15,6 +15,14 @@ const router  = new express.Router();
 // @desc   Auth user & get token
 // @route  POST /api/users/login
 // @access Public
+
+router.get('/top-sellers', expressAsyncHandler(async (req, res) => {
+    const topSellers = await User.find({ isSeller: true})
+        .sort({ 'seller.rating': -1 })
+        .limit(3);
+    res.send(topSellers);
+}));
+
 router.post('/login', expressAsyncHandler(async(req, res) => {
     const user = await User.findOne({email: req.body.email});
     if (user) {
