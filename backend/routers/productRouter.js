@@ -13,12 +13,35 @@ router.get('/', expressAsyncHandler(async (req, res) => {
     const seller = req.query.seller || '';
     const name = req.query.name || '';
     const category = req.query.category || '';
+    const order = req.query.order || '';
+    const min = req.query.min && Number(req.query.min) !== 0 ? Number(req.query.min) : 0;
+    const max = req.query.max && Number(req.query.max) !== 0 ? Number(req.query.max) : 0;
+    const rating = req.query.rating && Number(req.query.rating) !== 0 ? Number(req.query.rating) : 0;
+    
+    const ratingFilter = rating ? { rating: { $gte: rating } } : {};
+    const priceFilter = min && max ? { price: { $gte:min, $lte: max } } : {};
     const categoryFilter = category ? { category } : {};
     const nameFilter = name ? { name: {$regex: name, $options: 'i'} } : {};
     const sellerFilter = seller ? { seller } : {};
-    const products = await Product.find({...sellerFilter, ...nameFilter, ...categoryFilter}).populate(
+    const sortOrder = 
+    order === 'lowest'
+        ? { price: 1 } 
+        : order === 'highest'
+        ? { price: -1 }
+        : order === 'toprated'
+        ? { rating: -1 }
+        : { _id: -1 };
+
+    const products = await Product.find({
+        ...sellerFilter, 
+        ...nameFilter, 
+        ...categoryFilter,
+        ...priceFilter,
+        ...ratingFilter,
+    }).populate(
         'seller',
-        'seller.name seller.logo');
+        'seller.name seller.logo')
+        .sort(sortOrder);
     
     res.send(products);
 }));
@@ -108,6 +131,38 @@ router.delete('/:id', isAuth, isAdmin, expressAsyncHandler(async (req, res) => {
         res.send({ meassage: "Product Removed!", product: deletedProduct });
     } else {
         res.status(404).send({ message: "Product Not Found"});
+    }
+}));
+
+router.post('/:id/reviews', isAuth, expressAsyncHandler(async (req, res) => {
+    const productId = req.params.id;
+
+    const product = await Product.findById(productId);
+
+    if (product) {
+        if (product.reviews.find((item) => item.name === req.user.name)) {
+            return res
+              .status(400)
+              .send({ message: 'You already submitted a review' });
+          }
+        const review = {
+            name: req.user.name, 
+            rating: Number(req.body.rating),
+            comment: req.body.comment
+        }
+        product.reviews.push(review);
+        product.numReviews = product.reviews.length;
+        product.rating = product.reviews.reduce((accumilator, current) => current.rating + accumilator, 0) /
+        product.reviews.length;
+        const updatedProduct = await product.save();
+        res
+            .status(201)
+            .send({ 
+                message: "Review Created",
+                review: updatedProduct.reviews[updatedProduct.reviews.length - 1] 
+            });
+    } else {
+        res.status(404).send({ message: "Product Not Found!" })
     }
 }));
 

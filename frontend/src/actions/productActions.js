@@ -16,17 +16,29 @@ import {
     PRODUCT_DELETE_FAIL, 
     PRODUCT_CATEGORY_LIST_REQUEST,
     PRODUCT_CATEGORY_LIST_SUCCESS,
-    PRODUCT_CATEGORY_LIST_FAIL
+    PRODUCT_CATEGORY_LIST_FAIL,
+    PRODUCT_CREATE_REVIEW_REQUEST,
+    PRODUCT_CREATE_REVIEW_SUCCESS,
+    PRODUCT_CREATE_REVIEW_FAIL
 } from "../constants/productConstants";
 import axios from 'axios';
 
-export const listProducts = ({seller = '', name = '', category = '' }) => async (dispatch) => {
+export const listProducts = ({
+    seller = '', 
+    name = '', 
+    category = '', 
+    order = '',
+    min = 0, 
+    max = 0,
+    rating = 0,
+    
+}) => async (dispatch) => {
     dispatch({
         type: PRODUCT_LIST_REQUEST
     });
 
     try {
-        const { data } = await axios.get(`/api/products?seller=${seller}&name=${name}&category=${category}`);
+        const { data } = await axios.get(`/api/products?seller=${seller}&name=${name}&category=${category}&min=${min}&max=${max}&rating=${rating}&order=${order}`);
         dispatch({type: PRODUCT_LIST_SUCCESS, payload: data });
     } catch (error) {
         dispatch({ type: PRODUCT_LIST_FAIL, payload: error.message });
@@ -129,6 +141,30 @@ export const updateProduct = (product) => async (dispatch, getState) => {
             error.response && error.response.data.message
             ? error.response.data.message
             : error.message
+        });
+    }
+};
+
+export const createReview = (productId, review) => async (dispatch, getState) => {
+    dispatch({ type: PRODUCT_CREATE_REVIEW_REQUEST });
+
+    const { userLogin: { userInfo }} = getState();
+
+    try {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`
+            }
+        }
+        const { data } = await axios.post(`/api/products/${productId}/reviews`, review, config);
+        dispatch({type: PRODUCT_CREATE_REVIEW_SUCCESS, payload: data.review });
+    } catch (error) {
+        dispatch({ 
+            type: PRODUCT_CREATE_REVIEW_FAIL, 
+            payload: 
+            error.response && error.response.data.message
+                ? error.response.data.message
+                : error.message
         });
     }
 };

@@ -120,36 +120,36 @@ function Header() {
                         )}
             </div>
       </header>
-    <aside className={sidebarIsOpen ? 'open' : ''}>
-          <ul className="categories">
-            <li>
-              <strong>Categories</strong>
-              <button
-                onClick={() => setSidebarIsOpen(false)}
-                className="close-sidebar"
-                type="button"
-              >
-                <i className="fa fa-close"></i>
-              </button>
-            </li>
-            {categoriesLoading ? (
-              <LoadingBox></LoadingBox>
-            ) : categoriesError ? (
-              <MessageBox variant="danger">{categoriesError}</MessageBox>
-            ) : (
-              categories.map((cat) => (
-                <li key={cat}>
-                  <Link
-                    to={`/search/category/${cat}`}
-                    onClick={() => setSidebarIsOpen(false)}
-                  >
-                    {cat}
-                  </Link>
-                </li>
-              ))
-            )}
-          </ul>
-        </aside>
+      <aside className={sidebarIsOpen ? 'open' : ''}>
+        <ul className="categories">
+          <li>
+            <strong>Categories</strong>
+            <button
+              onClick={() => setSidebarIsOpen(false)}
+              className="close-sidebar"
+              type="button"
+            >
+              <i className="fa fa-close"></i>
+            </button>
+          </li>
+          {categoriesLoading ? (
+            <LoadingBox></LoadingBox>
+          ) : categoriesError ? (
+            <MessageBox variant="danger">{categoriesError}</MessageBox>
+          ) : (
+            categories.map((cat) => (
+              <li key={cat}>
+                <Link
+                  to={`/search/category/${cat}`}
+                  onClick={() => setSidebarIsOpen(false)}
+                >
+                  {cat}
+                </Link>
+              </li>
+            ))
+          )}
+        </ul>
+      </aside>
         </>
     )
 }

@@ -4,7 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import Rating from '../components/Rating';
 import MessageBox from '../components/MessageBox';
 import LoadingBox from '../components/LoadingBox';
-import { detailsOfProduct } from '../actions/productActions';
+import { createReview, detailsOfProduct } from '../actions/productActions';
+import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants';
 // import data from '../data';
 
 function ProductPage({ history, match}) {
@@ -13,20 +14,42 @@ function ProductPage({ history, match}) {
     const productId = match.params.id;
 
     const [qty, setQty] = useState(1);
+    const [rating, setRating] = useState(0);
+    const [comment, setComment] = useState('');
     const productDetails = useSelector((state) => state.productDetails);
     const { loading, error, product } = productDetails;
-    console.log(product)
+
+    const userLogin = useSelector((state) => state.userLogin);
+    const { userInfo } = userLogin;
+    
+    const productCreateReview = useSelector((state) => state.productCreateReview);
+    const { loading: createReviewLoading, error: createReviewError, success: createReviewSuccess } = productCreateReview;
 
     // if (!product) {
     //     return <div>Product not Found</div>;
     // }
     useEffect(() => {
+        if (createReviewSuccess) {
+            window.alert('Review Submitted Successfully');
+            setRating('');
+            setComment('');
+            dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
+        }
         dispatch(detailsOfProduct(productId))
-    }, [dispatch, productId]);
+    }, [dispatch, productId, createReviewSuccess]);
 
     const addToCartHandler  = () => {
         history.push(`/cart/${productId}?qty=${qty}`)
     };
+
+    const submitHandler = (event) => {
+        event.preventDefault();
+        if (comment && rating) {
+            dispatch(createReview(productId, { rating, comment, nname: userInfo.name }))
+        } else {
+            alert('Please enter comment and rating');
+        }
+    }
 
     return (
         <>
@@ -121,6 +144,82 @@ function ProductPage({ history, match}) {
                                 </ul>
                             </div>
                         </div>
+                    </div>
+                    <div>
+                        <h2 id="reviews">
+                            Reviews
+                        </h2>
+                        {product.reviews.length === 0 && (
+                            <MessageBox>There is no review</MessageBox>
+                        )}
+                        <ul>
+                            {product.reviews.map((review) => (
+                               <li key={review._id}>
+                                    <strong>{review.name}</strong>
+                                    <Rating rating={review.rating} caption=" "></Rating>
+                                    <p>{review.createdAt.substring(0, 10)}</p>
+                                    <p>{review.comment}</p>
+                               </li> 
+                            ))}
+                            <li>
+                                {userInfo ? (
+                                    <form 
+                                        className="form"
+                                        onSubmit={submitHandler}
+                                    >
+                                        <div>
+                                            <h2>Write a customer review</h2>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="rating">Rating</label>
+                                            <select 
+                                                id="rating" 
+                                                value={rating}
+                                                onChange={(event) => setRating(event.target.value)}
+                                            >
+                                                <option value="">Select...</option>
+                                                <option value="1">1- Poor</option>
+                                                <option value="2">2- Fair</option>
+                                                <option value="3">3- Good</option>
+                                                <option value="4">4- Very Good</option>
+                                                <option value="5">5- Excelent</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="comment">Comment</label>
+                                            <textarea 
+                                                id="comment"
+                                                value={comment}
+                                                onChange={(event) => setComment(event.target.value)}
+                                            >
+                                            
+                                            </textarea>
+                                        </div>
+                                        <div>
+                                            <label/>
+                                            <button
+                                                className="primary"
+                                                type="submit"
+                                            >
+                                                Submit
+                                            </button>
+                                        </div> 
+                                        <div>
+                                            {createReviewLoading && <LoadingBox></LoadingBox>}
+                                            {createReviewError && (
+                                                <MessageBox variant="danger">
+                                                {createReviewError}
+                                                </MessageBox>
+                                            )}
+                                        </div>   
+                                    </form>
+                                    ) : (
+                                        <MessageBox>
+                                            Please <Link to="/login">Sign In</Link> to write a review
+                                        </MessageBox>
+                                    )}
+                            </li>
+                        </ul>
                     </div>
                 </>
             )}

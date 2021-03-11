@@ -1,8 +1,6 @@
 // import logo from './logo.svg';
 // import './App.css';
-import { Link } from 'react-router-dom';
 import { BrowserRouter, Route } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import HomePage from './pages/HomePage';
 import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage';
@@ -25,7 +23,6 @@ import UserEditPage from './pages/UserEditPage';
 import SellerRoute from './components/SellerRoute';
 import SellerPage from './pages/SellerPage';
 import SearchPage from './pages/SearchPage';
-import { useState } from 'react';
 
 function App() {
 	
@@ -48,6 +45,11 @@ function App() {
 					<Route path="/search/name/:name?" component={SearchPage} exact></Route>
 					<Route path="/search/category/:category" component={SearchPage} exact></Route>
 					<Route path="/search/category/:category/name/:name" component={SearchPage} exact></Route>
+					<Route
+						path="/search/category/:category/name/:name/min/:min/max/:max/rating/:rating/order/:order"
+						component={SearchPage}
+						exact
+					></Route>
 					<PrivateRoute path="/profile" component={ProfilePage}></PrivateRoute>
 					<AdminRoute path="/productlist" component={ProductListPage} exact></AdminRoute>
 					<AdminRoute path="/orderlist" component={OrderListPage} exact></AdminRoute>
